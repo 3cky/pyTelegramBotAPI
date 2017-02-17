@@ -117,51 +117,47 @@ class Type(object, metaclass=TypeMeta):
         return len(self._valid_fields) == 0
 
     def __setattr__(self, key, value):
-        self.__set(key, value)
+        if not self.__set(key, value):
+            raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
 
     def __setitem__(self, key, value):
-        self.__set(key, value)
+        if not self.__set(key, value):
+            raise KeyError('"%s" has no item "%s"' % (self._name, key))
 
     def __set(self, key, value):
         if key.startswith('_'):
             super(Type, self).__setattr__(key, value)
-            return
-
+            return True
         name = key.lower()
         if name in self._valid_fields:
             if self._d is None:
                 self._d = {}
             ad = AssignDelegate(self._d, name, self._valid_fields[name])
             ad._from_raw(value)
-            return
-        raise TypeError('"%s" does not have a "%s" field' % (self.__class__.__name__, key))
+            return True
+        return False
 
     def __getattr__(self, key):
-        return self.__get(key)
+        attr = self.__get(key)
+        if attr is None:
+            raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
+        return attr
 
     def __getitem__(self, key):
-        return self.__get(key)
+        item = self.__get(key)
+        if item is None:
+            raise KeyError('"%s" has no item "%s"' % (self._name, key))
+        return item
 
     def __get(self, key):
         if not isinstance(key, str):
-            raise AttributeError("'%s' has no field '%s'" % (self._name, key))
-
+            return None
         name = key.lower()
         if self._d and name in self._d:
             if self._d[name]._leaf:
                 return self._d[name]._d
             return self._d[name]
-
-        if name in self._valid_fields:
-            if self._valid_fields[name].leaf and not self._valid_fields[name].list:
-                raise AttributeError("Optional field '%s' not found in '%s'" % (key, self._name))
-            if self._d is None:
-                self._d = {}
-            if self._valid_fields[name].list:
-                return ListDelegate(self._d, name, self._valid_fields[name])
-            return AssignDelegate(self._d, name, self._valid_fields[name])
-
-        self.__field_error(key)
+        return None
 
     def __delattr__(self, key):
         self.__del(key)
@@ -185,9 +181,6 @@ class Type(object, metaclass=TypeMeta):
             return self._d == other
         return repr(self._to_raw(strict=False)) == repr(other._to_raw(strict=False))
 
-    def __field_error(self, key):
-        raise KeyError('"%s" does not have a "%s" field' % (self.__class__.__name__, key))
-
 
 class Delegate(object):
     def __init__(self, d, key, field):
@@ -195,6 +188,8 @@ class Delegate(object):
         self._key = key
         self._field = field
 
+    def __repr__(self):
+        return '<%s %s>' % (self.__class__.__name__, self._d)
 
 class AssignDelegate(Delegate):
     def _from_raw(self, raw):
