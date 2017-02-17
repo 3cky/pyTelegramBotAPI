@@ -6,6 +6,8 @@ from TelegramBotAPI.types.primitive import Integer, String, Boolean, Float
 class Update(Type):
     update_id = Field(Integer)
     message = Field('Message', optional=True)
+    channel_post = Field('Message', optional=True)
+    edited_channel_post = Field('Message', optional=True)
     inline_query = Field('InlineQuery', optional=True)
     chosen_inline_result = Field('ChosenInlineResult', optional=True)
 
@@ -32,11 +34,16 @@ class Message(Type):
     date = Field(Integer)
     chat = Field(User, Chat)
     forward_from = Field(User, optional=True)
+    forward_from_chat = Field(User, Chat, optional=True)
+    forward_from_message_id = Field(Integer, optional=True)
     forward_date = Field(Integer, optional=True)
     reply_to_message = Field('Message', optional=True)
+    edit_date = Field(Integer, optional=True)
     text = Field(String, optional=True)
+    entities = Field(['MessageEntity'], optional=True)
     audio = Field('Audio', optional=True)
     document = Field('Document', optional=True)
+    # TODO game = Field('Game', optional=True)
     photo = Field(['PhotoSize'], optional=True)
     sticker = Field('Sticker', optional=True)
     video = Field('Video', optional=True)
@@ -44,12 +51,26 @@ class Message(Type):
     caption = Field(String, optional=True)
     contact = Field('Contact', optional=True)
     location = Field('Location', optional=True)
-    new_chat_participant = Field(User, optional=True)
-    left_chat_participant = Field(User, optional=True)
+    # TODO venue = Field('Venue', optional=True)
+    new_chat_member = Field(User, optional=True)
+    left_chat_member = Field(User, optional=True)
     new_chat_title = Field(String, optional=True)
     new_chat_photo = Field(['PhotoSize'], optional=True)
     delete_chat_photo = Field(Boolean, optional=True)
     group_chat_created = Field(Boolean, optional=True)
+    supergroup_chat_created = Field(Boolean, optional=True)
+    channel_chat_created = Field(Boolean, optional=True)
+    migrate_to_chat_id = Field(Integer, optional=True)
+    migrate_from_chat_id = Field(Integer, optional=True)
+    pinned_message = Field('Message', optional=True)
+
+
+class MessageEntity(Type):
+    type = Field(String)
+    offset = Field(Integer)
+    length = Field(Integer)
+    url = Field(String, optional=True)
+    user = Field(User, optional=True)
 
 
 class PhotoSize(Type):
