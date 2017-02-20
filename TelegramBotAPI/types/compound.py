@@ -26,6 +26,7 @@ class Chat(Type):
     username = Field(String, optional=True)
     first_name = Field(String, optional=True)
     last_name = Field(String, optional=True)
+    all_members_are_administrators = Field(Boolean, optional=True)
 
 
 class Message(Type):
