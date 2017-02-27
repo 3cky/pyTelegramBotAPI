@@ -12,7 +12,14 @@ class String(Type):
     def _from_raw(self, primitive):
         if primitive is None:
             raise TypeError('None is an invalid String')
-        self._d = str(primitive)
+        try:
+            if isinstance(primitive, unicode):
+                self._d = primitive.encode('utf-8', 'ignore')
+            else:
+                self._d = str(primitive)
+        except:
+            # no unicode type in Python 3
+            self._d = str(primitive)
 
 
 class Boolean(Type):

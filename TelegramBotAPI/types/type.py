@@ -1,5 +1,7 @@
 import logging
 
+from six import with_metaclass
+
 log = logging.getLogger(__name__)
 _type_map = {}
 
@@ -19,7 +21,7 @@ class TypeMeta(type):
         return cls
 
 
-class Type(object, metaclass=TypeMeta):
+class Type(with_metaclass(TypeMeta)):
     __type_map = _type_map
     __from_raw_dropped = None
     __from_raw_found = None
