@@ -68,6 +68,12 @@ class Type(with_metaclass(TypeMeta)):
 
     def _to_raw(self, strict=True):
         if self._leaf:
+            try:
+                if type(self._d) == unicode:
+                    return self._d.encode("utf-8")
+            except:
+                # no unicode type in Python 3
+                pass
             return self._d
         raw = {}
         for key in self._valid_fields:

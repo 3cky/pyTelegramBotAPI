@@ -13,10 +13,10 @@ class String(Type):
         if primitive is None:
             raise TypeError('None is an invalid String')
         try:
-            if isinstance(primitive, unicode):
-                self._d = primitive.encode('utf-8', 'ignore')
+            if type(primitive) == unicode:
+                self._d = primitive
             else:
-                self._d = str(primitive)
+                self._d = str(primitive).decode('utf-8', 'ignore')
         except:
             # no unicode type in Python 3
             self._d = str(primitive)
