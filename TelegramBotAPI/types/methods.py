@@ -1,7 +1,11 @@
+import json
+
 from TelegramBotAPI.types.type import Type
 from TelegramBotAPI.types.field import Field
 from TelegramBotAPI.types.primitive import Integer, String, Boolean, Float, InputFile
-from TelegramBotAPI.types.compound import ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply
+from TelegramBotAPI.types.compound import ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, \
+    InlineQueryResultArticle, InlineQueryResultGif, InlineQueryResultMpeg4Gif, \
+    InlineQueryResultPhoto, InlineQueryResultVideo, InlineQueryResultGame
 from TelegramBotAPI.types.compound import Update, Message, User, UserProfilePhotos, File
 
 
@@ -33,7 +37,7 @@ class sendMessage(Method):
     text = Field(String)
     disable_web_page_preview = Field(Boolean, optional=True)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardHide, ReplyKeyboardMarkup, ForceReply, optional=True)
+    reply_markup = Field(ReplyKeyboardRemove, ReplyKeyboardMarkup, ForceReply, optional=True)
     parse_mode = Field(String, optional=True)
 
 
@@ -52,7 +56,7 @@ class sendPhoto(Method):
     photo = Field(InputFile, String)
     caption = Field(String, optional=True)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply, optional=True)
+    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendAudio(Method):
@@ -64,7 +68,7 @@ class sendAudio(Method):
     performer = Field(String, optional=True)
     title = Field(String, optional=True)
     reply_to_message_id = Field(Integer)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply)
+    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply)
 
 
 class sendDocument(Method):
@@ -73,7 +77,7 @@ class sendDocument(Method):
     chat_id = Field(Integer, String)
     document = Field(InputFile, String)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply, optional=True)
+    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendSticker(Method):
@@ -82,7 +86,7 @@ class sendSticker(Method):
     chat_id = Field(Integer, String)
     sticker = Field(InputFile, String)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply, optional=True)
+    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendVideo(Method):
@@ -93,7 +97,7 @@ class sendVideo(Method):
     duration = Field(Integer, optional=True)
     caption = Field(String, optional=True)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply, optional=True)
+    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendVoice(Method):
@@ -103,7 +107,7 @@ class sendVoice(Method):
     audio = Field(InputFile, String)
     duration = Field(Integer, optional=True)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply, optional=True)
+    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendLocation(Method):
@@ -113,7 +117,7 @@ class sendLocation(Method):
     latitude = Field(Float)
     longitude = Field(Float)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply, optional=True)
+    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendChatAction(Method):
@@ -141,7 +145,15 @@ class answerInlineQuery(Method):
     _response = Boolean
 
     inline_query_id = Field(String)
-    results = Field(['InlineQueryResultArticle', ''])
+    results = Field([InlineQueryResultArticle, InlineQueryResultGif, InlineQueryResultMpeg4Gif,
+                     InlineQueryResultPhoto, InlineQueryResultVideo, InlineQueryResultGame])
     cache_time = Field(Integer, optional=True)
     is_personal = Field(Boolean, optional=True)
     next_offset = Field(String, optional=True)
+    switch_pm_text = Field(String, optional=True)
+    switch_pm_parameter = Field(String, optional=True)
+
+    def _to_raw(self, strict=True):
+        raw = super(answerInlineQuery, self)._to_raw()
+        raw['results'] = json.dumps(raw['results'])
+        return raw

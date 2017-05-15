@@ -64,7 +64,7 @@ class Type(with_metaclass(TypeMeta)):
                 raise TypeError('"%s" is an expected field in %s' % (key, self.__class__.__name__))
 
         if self.__from_raw_found == 0:
-            raise TypeError('No fields were found for % in %s' % (self.__class__.__name__, raw))
+            raise TypeError('No fields were found for %s in %s' % (self.__class__.__name__, raw))
 
     def _to_raw(self, strict=True):
         if self._leaf:
@@ -140,8 +140,12 @@ class Type(with_metaclass(TypeMeta)):
         if name in self._valid_fields:
             if self._d is None:
                 self._d = {}
-            ad = AssignDelegate(self._d, name, self._valid_fields[name])
-            ad._from_raw(value)
+            if self._valid_fields[name].list:
+                ld = ListDelegate(self._d, name, self._valid_fields[name])
+                ld.extend(value)
+            else:
+                ad = AssignDelegate(self._d, name, self._valid_fields[name])
+                ad._from_raw(value)
             return True
         return False
 
@@ -198,6 +202,7 @@ class Delegate(object):
 
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self._d)
+
 
 class AssignDelegate(Delegate):
     def _from_raw(self, raw):

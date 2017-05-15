@@ -152,8 +152,8 @@ class ReplyKeyboardMarkup(Type):
     selective = Field(Boolean, optional=True)
 
 
-class ReplyKeyboardHide(Type):
-    hide_keyboard = Field(Boolean)
+class ReplyKeyboardRemove(Type):
+    remove_keyboard = Field(Boolean)
     selective = Field(Boolean, optional=True)
 
 
@@ -177,6 +177,19 @@ class Error(Type):
     description = Field(String)
 
 
+class InlineKeyboardMarkup(Type):
+    inline_keyboard = Field(['InlineKeyboardButton'])
+
+
+class InlineKeyboardButton(Type):
+    text = Field(String)
+    url = Field(String, optional=True)
+    callback_data = Field(String, optional=True)
+    switch_inline_query = Field(String, optional=True)
+    switch_inline_query_current_chat = Field(String, optional=True)
+    callback_game = Field('CallbackGame', optional=True)
+
+
 class InlineQuery(Type):
     id = Field(String)
     froM = Field(User)
@@ -184,7 +197,11 @@ class InlineQuery(Type):
     offset = Field(String)
 
 
-class InlineQueryResultArticle(Type):
+class InlineQueryResult(Type):
+    pass
+
+
+class InlineQueryResultArticle(InlineQueryResult):
     type = Field(String)
     id = Field(String)
     title = Field(String)
@@ -199,7 +216,7 @@ class InlineQueryResultArticle(Type):
     thumb_height = Field(Integer, optional=True)
 
 
-class InlineQueryResultPhoto(Type):
+class InlineQueryResultPhoto(InlineQueryResult):
     type = Field(String)
     id = Field(String)
     photo_url = Field(String)
@@ -214,7 +231,7 @@ class InlineQueryResultPhoto(Type):
     disable_web_page_preview = Field(Boolean, optional=True)
 
 
-class InlineQueryResultGif(Type):
+class InlineQueryResultGif(InlineQueryResult):
     type = Field(String)
     id = Field(String)
     gif_url = Field(String)
@@ -228,7 +245,7 @@ class InlineQueryResultGif(Type):
     disable_web_page_preview = Field(Boolean, optional=True)
 
 
-class InlineQueryResultMpeg4Gif(Type):
+class InlineQueryResultMpeg4Gif(InlineQueryResult):
     type = Field(String)
     id = Field(String)
     mpeg4_url = Field(String)
@@ -242,7 +259,7 @@ class InlineQueryResultMpeg4Gif(Type):
     disable_web_page_preview = Field(Boolean, optional=True)
 
 
-class InlineQueryResultVideo(Type):
+class InlineQueryResultVideo(InlineQueryResult):
     type = Field(String)
     id = Field(String)
     video_url = Field(String)
@@ -258,7 +275,35 @@ class InlineQueryResultVideo(Type):
     description = Field(String, optional=True)
 
 
+class InlineQueryResultGame(InlineQueryResult):
+    type = Field(String)
+    id = Field(String)
+    game_short_name = Field(String)
+    reply_markup = Field('InlineKeyboardMarkup', optional=True)
+
+
 class ChosenInlineResult(Type):
     result_id = Field(String)
     froM = Field(User)
     query = Field(String)
+
+
+class Game(Type):
+    title = Field(String)
+    description = Field(String)
+    photo = Field(['PhotoSize'])
+    text = Field(String, optional=True)
+    text_entities = Field(['MessageEntity'], optional=True)
+    animation = Field('Animation', optional=True)
+
+
+class Animation(Type):
+    file_id = Field(String)
+    thumb = Field('PhotoSize', optional=True)
+    file_name = Field(String, optional=True)
+    mime_type = Field(String, optional=True)
+    file_size = Field(Integer, optional=True)
+
+
+class CallbackGame(Type):
+    pass

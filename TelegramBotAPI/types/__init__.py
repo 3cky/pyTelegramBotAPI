@@ -1,9 +1,10 @@
 from TelegramBotAPI.types.methods import sendMessage, getUpdates, setWebhook, getMe,\
     forwardMessage, sendPhoto, sendAudio, sendDocument, sendSticker, sendVideo, sendVoice,\
-    sendLocation, sendChatAction, getUserProfilePhotos, getFile
+    sendLocation, sendChatAction, getUserProfilePhotos, getFile, answerInlineQuery
 from TelegramBotAPI.types.compound import User, Chat, PhotoSize, Audio, Document, Sticker, Video,\
-    Contact, Location, UserProfilePhotos, ReplyKeyboardMarkup, ReplyKeyboardHide, ForceReply,\
-    Voice, Message, Update, File, Error
+    Contact, Location, UserProfilePhotos, ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply,\
+    Voice, Message, Update, File, Error, InlineKeyboardMarkup, InlineKeyboardButton, \
+    InlineQueryResultGame, Game, Animation, CallbackGame
 
 __all__ = [
     'sendMessage',
@@ -21,6 +22,7 @@ __all__ = [
     'sendChatAction',
     'getUserProfilePhotos',
     'getFile',
+    'answerInlineQuery',
     'User',
     'Chat',
     'PhotoSize',
@@ -32,11 +34,17 @@ __all__ = [
     'Location',
     'UserProfilePhotos',
     'ReplyKeyboardMarkup',
-    'ReplyKeyboardHide',
+    'ReplyKeyboardRemove',
+    'InlineKeyboardMarkup',
+    'InlineKeyboardButton',
+    'InlineQueryResultGame',
     'ForceReply',
     'Voice',
     'Message',
     'Update',
     'File',
     'Error',
+    'Game',
+    'Animation',
+    'CallbackGame',
 ]
