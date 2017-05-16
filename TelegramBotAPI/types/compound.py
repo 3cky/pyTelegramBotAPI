@@ -10,6 +10,7 @@ class Update(Type):
     edited_channel_post = Field('Message', optional=True)
     inline_query = Field('InlineQuery', optional=True)
     chosen_inline_result = Field('ChosenInlineResult', optional=True)
+    callback_query = Field('CallbackQuery', optional=True)
 
 
 class User(Type):
@@ -188,6 +189,16 @@ class InlineKeyboardButton(Type):
     switch_inline_query = Field(String, optional=True)
     switch_inline_query_current_chat = Field(String, optional=True)
     callback_game = Field('CallbackGame', optional=True)
+
+
+class CallbackQuery(Type):
+    id = Field(String)
+    froM = Field(User)
+    message = Field('Message', optional=True)
+    inline_message_id = Field(String, optional=True)
+    chat_instance = Field(String)
+    data = Field(String, optional=True)
+    game_short_name = Field(String, optional=True)
 
 
 class InlineQuery(Type):

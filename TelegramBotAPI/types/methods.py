@@ -5,7 +5,7 @@ from TelegramBotAPI.types.field import Field
 from TelegramBotAPI.types.primitive import Integer, String, Boolean, Float, InputFile
 from TelegramBotAPI.types.compound import ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, \
     InlineQueryResultArticle, InlineQueryResultGif, InlineQueryResultMpeg4Gif, \
-    InlineQueryResultPhoto, InlineQueryResultVideo, InlineQueryResultGame
+    InlineQueryResultPhoto, InlineQueryResultVideo, InlineQueryResultGame, InlineKeyboardMarkup
 from TelegramBotAPI.types.compound import Update, Message, User, UserProfilePhotos, File
 
 
@@ -127,6 +127,16 @@ class sendChatAction(Method):
     action = Field(String)
 
 
+class sendGame(Method):
+    _response = Message
+
+    chat_id = Field(Integer)
+    game_short_name = Field(String)
+    disable_notification = Field(Boolean, optional=True)
+    reply_to_message_id = Field(Integer, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, optional=True)
+
+
 class getUserProfilePhotos(Method):
     _response = UserProfilePhotos
 
@@ -157,3 +167,13 @@ class answerInlineQuery(Method):
         raw = super(answerInlineQuery, self)._to_raw()
         raw['results'] = json.dumps(raw['results'])
         return raw
+
+
+class answerCallbackQuery(Method):
+    _response = Boolean
+
+    callback_query_id = Field(String)
+    text = Field(String, optional=True)
+    show_alert = Field(Boolean, optional=True)
+    url = Field(String, optional=True)
+    cache_time = Field(Integer, optional=True)
