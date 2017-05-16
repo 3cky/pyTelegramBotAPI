@@ -11,12 +11,13 @@ class Field(object):
             self.optional = True
             return
 
-        for type in args:
-            if isinstance(type, list):
-                type = type[0]
+        for arg in args:
+            if isinstance(arg, list):
                 self.list = True
+                self.types = arg
                 assert len(args) == 1  # Only allow a single type when using a list
-            self.types.append(type)
+                break
+            self.types.append(arg)
 
     def __repr__(self):
         return '<Field(%s)>' % (', '.join([t.__name__ for t in self.types]))
