@@ -296,12 +296,12 @@ class ListDelegate(Delegate):
             self._d[self._key] = self
 
     def append(self, value):
-        v = None
-        for t in self._field.types:
-            if isinstance(value, t):
-                v = t()
-                break
-        assert v
+        if len(self._field.types) == 1:
+            t = self._field.types[0]
+        else:
+            t = next((t for t in self._field.types if isinstance(value, t)), None)
+        assert t
+        v = t()
         v._from_raw(value)
         self._l.append(v)
 
