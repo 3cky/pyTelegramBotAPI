@@ -32,7 +32,10 @@ class Field(object):
             from TelegramBotAPI.types.type import Type
             if isinstance(t, str):
                 return Type._type(t)
-            assert issubclass(t, Type)
+            if isinstance(t, list):
+                assert all([issubclass(el, Type) for el in t])
+            else:
+                assert issubclass(t, Type)
             return t
         self.types = [load(t) for t in self.types]
 

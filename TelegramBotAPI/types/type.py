@@ -301,8 +301,12 @@ class ListDelegate(Delegate):
         else:
             t = next((t for t in self._field.types if isinstance(value, t)), None)
         assert t
-        v = t()
-        v._from_raw(value)
+        if isinstance(t, list):
+            t = self._field.types[0][0]
+            v = [t(raw) for raw in value]
+        else:
+            v = t()
+            v._from_raw(value)
         self._l.append(v)
 
     def extend(self, values):
@@ -320,7 +324,10 @@ class ListDelegate(Delegate):
         for i in range(len(self._l)):
             v = self._l[i]
             if v:
-                ret.append(v._to_raw(strict))
+                if isinstance(v, list):
+                    ret.append([el._to_raw(strict) for el in v])
+                else:
+                    ret.append(v._to_raw(strict))
             elif strict:
                 raise IndexError('Index [%d] of list "%s" not set' % (i, self._key))
         return ret
@@ -330,16 +337,20 @@ class ListDelegate(Delegate):
 
         for i in range(len(self._l)):
             v = self._l[i]
-            if v:
+            if v and not isinstance(v, list):
                 d = v._from_raw_dropped()
                 if d:
                     ret.append(d)
         return ret
 
     def __setitem__(self, index, value):
-        t = self._field.types[0]()
-        t._from_raw(value)
-        self._l[index] = t
+        t = self._field.types[0]
+        if isinstance(t, list):
+            v = value
+        else:
+            v = t()
+            v._from_raw(value)
+        self._l[index] = v
 
     def __getitem__(self, index):
         try:

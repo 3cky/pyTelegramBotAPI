@@ -80,7 +80,6 @@ class PhotoSize(Type):
     width = Field(Integer)
     height = Field(Integer)
     file_size = Field(Integer, optional=True)
-    file_path = Field(ignore=True)
 
 
 class Audio(Type):
@@ -139,11 +138,7 @@ class Location(Type):
 
 class UserProfilePhotos(Type):
     total_count = Field(Integer)
-    photos = Field([PhotoSize])
-
-    def _to_raw(self, strict=True):
-        setattr(self, 'total_count', len(self._d['photos']))
-        return super(UserProfilePhotos, self)._to_raw()
+    photos = Field([[PhotoSize]])
 
 
 class ReplyKeyboardMarkup(Type):
