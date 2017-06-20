@@ -18,6 +18,7 @@ class User(Type):
     first_name = Field(String)
     last_name = Field(String, optional=True)
     username = Field(String, optional=True)
+    language_code = Field(String, optional=True)
 
 
 class Chat(Type):
