@@ -14,9 +14,6 @@ class BaseClient(object):
         return 'https://api.telegram.org/bot%s/%s' % (self.__token, method._name)
 
     def _interpret_response(self, value, method):
-        if self._debug:
-            log.debug('RSP: %s', value)
-
         if value['ok'] is not True:
             e = Error()
             e._from_raw(value)
