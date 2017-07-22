@@ -14,5 +14,6 @@ setup(
         'pyOpenSSL',
         'service_identity',
         'requests',
+        'six',
     ],
 )

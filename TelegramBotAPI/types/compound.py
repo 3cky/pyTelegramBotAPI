@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from TelegramBotAPI.types.type import Type
 from TelegramBotAPI.types.field import Field
 from TelegramBotAPI.types.primitive import Integer, String, Boolean, Float
@@ -174,10 +176,6 @@ class Error(Type):
     description = Field(String)
 
 
-class InlineKeyboardMarkup(Type):
-    inline_keyboard = Field(['InlineKeyboardButton'])
-
-
 class InlineKeyboardButton(Type):
     text = Field(String)
     url = Field(String, optional=True)
@@ -185,6 +183,10 @@ class InlineKeyboardButton(Type):
     switch_inline_query = Field(String, optional=True)
     switch_inline_query_current_chat = Field(String, optional=True)
     callback_game = Field('CallbackGame', optional=True)
+
+
+class InlineKeyboardMarkup(Type):
+    inline_keyboard = Field([[InlineKeyboardButton]])
 
 
 class CallbackQuery(Type):

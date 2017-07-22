@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 
 from TelegramBotAPI.types.type import Type
@@ -35,10 +37,18 @@ class sendMessage(Method):
 
     chat_id = Field(Integer, String)
     text = Field(String)
-    disable_web_page_preview = Field(Boolean, optional=True)
-    reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardRemove, ReplyKeyboardMarkup, ForceReply, optional=True)
     parse_mode = Field(String, optional=True)
+    disable_web_page_preview = Field(Boolean, optional=True)
+    disable_notification = Field(Boolean, optional=True)
+    reply_to_message_id = Field(Integer, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
+
+    def _to_raw(self, strict=True):
+        raw = super(sendMessage, self)._to_raw()
+        if 'reply_markup' in raw:
+            raw['reply_markup'] = json.dumps(raw['reply_markup'])
+        return raw
 
 
 class forwardMessage(Method):
@@ -56,7 +66,8 @@ class sendPhoto(Method):
     photo = Field(InputFile, String)
     caption = Field(String, optional=True)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendAudio(Method):
@@ -68,7 +79,8 @@ class sendAudio(Method):
     performer = Field(String, optional=True)
     title = Field(String, optional=True)
     reply_to_message_id = Field(Integer)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendDocument(Method):
@@ -77,7 +89,8 @@ class sendDocument(Method):
     chat_id = Field(Integer, String)
     document = Field(InputFile, String)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendSticker(Method):
@@ -86,7 +99,8 @@ class sendSticker(Method):
     chat_id = Field(Integer, String)
     sticker = Field(InputFile, String)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendVideo(Method):
@@ -97,7 +111,8 @@ class sendVideo(Method):
     duration = Field(Integer, optional=True)
     caption = Field(String, optional=True)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendVoice(Method):
@@ -107,7 +122,8 @@ class sendVoice(Method):
     audio = Field(InputFile, String)
     duration = Field(Integer, optional=True)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendLocation(Method):
@@ -117,7 +133,8 @@ class sendLocation(Method):
     latitude = Field(Float)
     longitude = Field(Float)
     reply_to_message_id = Field(Integer, optional=True)
-    reply_markup = Field(ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
+                         ReplyKeyboardRemove, ForceReply, optional=True)
 
 
 class sendChatAction(Method):
@@ -177,3 +194,21 @@ class answerCallbackQuery(Method):
     show_alert = Field(Boolean, optional=True)
     url = Field(String, optional=True)
     cache_time = Field(Integer, optional=True)
+
+
+class editMessageText(Method):
+    _response = Message
+
+    chat_id = Field(Integer, String)
+    message_id = Field(Integer, optional=True)
+    inline_message_id = Field(String, optional=True)
+    text = Field(String)
+    parse_mode = Field(String, optional=True)
+    disable_web_page_preview = Field(Boolean, optional=True)
+    reply_markup = Field(InlineKeyboardMarkup, optional=True)
+
+    def _to_raw(self, strict=True):
+        raw = super(editMessageText, self)._to_raw()
+        if 'reply_markup' in raw:
+            raw['reply_markup'] = json.dumps(raw['reply_markup'])
+        return raw
