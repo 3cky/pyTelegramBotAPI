@@ -5,7 +5,7 @@ from tempfile import NamedTemporaryFile
 
 from TelegramBotAPI.types.type import Type
 from TelegramBotAPI.types.primitive import Float, String, Integer, InputFile
-from TelegramBotAPI.types import Message, User, Chat, ReplyKeyboardMarkup, UserProfilePhotos, ReplyKeyboardHide, Location, File
+from TelegramBotAPI.types import Message, User, Chat, ReplyKeyboardMarkup, UserProfilePhotos, ReplyKeyboardRemove, Location, File
 from TelegramBotAPI.types import sendMessage, sendAudio
 
 
@@ -139,7 +139,7 @@ class Methods(TestCase):
         self.assertEquals(ex, m._to_raw())
 
     def test_assign_boolean(self):
-        m = ReplyKeyboardHide()
+        m = ReplyKeyboardRemove()
 
         def g():
             m.hide_keyboard = 'true'
