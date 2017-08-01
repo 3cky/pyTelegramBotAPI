@@ -208,3 +208,10 @@ class editMessageText(ReplyMarkupMethod):
     parse_mode = Field(String, optional=True)
     disable_web_page_preview = Field(Boolean, optional=True)
     reply_markup = Field(InlineKeyboardMarkup, optional=True)
+
+
+class deleteMessage(Method):
+    _response = Boolean
+
+    chat_id = Field(Integer, String)
+    message_id = Field(Integer)
