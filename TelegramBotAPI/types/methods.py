@@ -15,6 +15,14 @@ class Method(Type):
     _response = None
 
 
+class ReplyMarkupMethod(Method):
+    def _to_raw(self, strict=True):
+        raw = super(Method, self)._to_raw()
+        if 'reply_markup' in raw:
+            raw['reply_markup'] = json.dumps(raw['reply_markup'])
+        return raw
+
+
 class getUpdates(Method):
     _response = Update
 
@@ -32,7 +40,7 @@ class getMe(Method):
     _response = User
 
 
-class sendMessage(Method):
+class sendMessage(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -44,12 +52,6 @@ class sendMessage(Method):
     reply_markup = Field(InlineKeyboardMarkup, ReplyKeyboardMarkup,
                          ReplyKeyboardRemove, ForceReply, optional=True)
 
-    def _to_raw(self, strict=True):
-        raw = super(sendMessage, self)._to_raw()
-        if 'reply_markup' in raw:
-            raw['reply_markup'] = json.dumps(raw['reply_markup'])
-        return raw
-
 
 class forwardMessage(Method):
     _response = Message
@@ -59,7 +61,7 @@ class forwardMessage(Method):
     message_id = Field(Integer)
 
 
-class sendPhoto(Method):
+class sendPhoto(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -70,7 +72,7 @@ class sendPhoto(Method):
                          ReplyKeyboardRemove, ForceReply, optional=True)
 
 
-class sendAudio(Method):
+class sendAudio(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -83,7 +85,7 @@ class sendAudio(Method):
                          ReplyKeyboardRemove, ForceReply, optional=True)
 
 
-class sendDocument(Method):
+class sendDocument(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -93,7 +95,7 @@ class sendDocument(Method):
                          ReplyKeyboardRemove, ForceReply, optional=True)
 
 
-class sendSticker(Method):
+class sendSticker(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -103,7 +105,7 @@ class sendSticker(Method):
                          ReplyKeyboardRemove, ForceReply, optional=True)
 
 
-class sendVideo(Method):
+class sendVideo(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -115,7 +117,7 @@ class sendVideo(Method):
                          ReplyKeyboardRemove, ForceReply, optional=True)
 
 
-class sendVoice(Method):
+class sendVoice(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -126,7 +128,7 @@ class sendVoice(Method):
                          ReplyKeyboardRemove, ForceReply, optional=True)
 
 
-class sendLocation(Method):
+class sendLocation(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -144,7 +146,7 @@ class sendChatAction(Method):
     action = Field(String)
 
 
-class sendGame(Method):
+class sendGame(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer)
@@ -196,7 +198,7 @@ class answerCallbackQuery(Method):
     cache_time = Field(Integer, optional=True)
 
 
-class editMessageText(Method):
+class editMessageText(ReplyMarkupMethod):
     _response = Message
 
     chat_id = Field(Integer, String)
@@ -206,9 +208,3 @@ class editMessageText(Method):
     parse_mode = Field(String, optional=True)
     disable_web_page_preview = Field(Boolean, optional=True)
     reply_markup = Field(InlineKeyboardMarkup, optional=True)
-
-    def _to_raw(self, strict=True):
-        raw = super(editMessageText, self)._to_raw()
-        if 'reply_markup' in raw:
-            raw['reply_markup'] = json.dumps(raw['reply_markup'])
-        return raw
