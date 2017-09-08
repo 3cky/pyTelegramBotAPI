@@ -17,6 +17,7 @@ class Update(Type):
 
 class User(Type):
     id = Field(Integer)
+    is_bot = Field(Boolean)
     first_name = Field(String)
     last_name = Field(String, optional=True)
     username = Field(String, optional=True)
@@ -41,9 +42,11 @@ class Message(Type):
     forward_from = Field(User, optional=True)
     forward_from_chat = Field(User, Chat, optional=True)
     forward_from_message_id = Field(Integer, optional=True)
+    forward_signature = Field(String, optional=True)
     forward_date = Field(Integer, optional=True)
     reply_to_message = Field('Message', optional=True)
     edit_date = Field(Integer, optional=True)
+    author_signature = Field(String, optional=True)
     text = Field(String, optional=True)
     entities = Field(['MessageEntity'], optional=True)
     audio = Field('Audio', optional=True)
